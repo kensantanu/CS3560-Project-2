@@ -1,3 +1,5 @@
+import java.util.*;
+
 import GUI.*;
 
 public class AdminControlPanel {
@@ -6,6 +8,7 @@ public class AdminControlPanel {
 	private static AdminControlPanel obj;	
 	
 	// local variables
+	Vector<User> userData = new Vector<User>();
 	
 	
 	// private constructor
