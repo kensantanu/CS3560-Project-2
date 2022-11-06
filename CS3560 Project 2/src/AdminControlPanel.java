@@ -1,6 +1,4 @@
-import java.util.*;
-
-import GUI.*;
+import javax.swing.tree.DefaultTreeModel;
 
 public class AdminControlPanel {
 	
@@ -8,11 +6,11 @@ public class AdminControlPanel {
 	private static AdminControlPanel obj;	
 	
 	// local variables
-	Vector<User> userData = new Vector<User>();
-	
-	
+	Node root = new Node("Root");
+	DefaultTreeModel treeModel = new DefaultTreeModel(root);
+		
 	// private constructor
-    AdminControlPanel()
+    private AdminControlPanel()
     {
     	new MainPanel();
     }

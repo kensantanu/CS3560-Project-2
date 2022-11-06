@@ -1,6 +1,6 @@
 import java.util.Vector;
 
-public class User {
+public class User{
 	
 	// local variables
 	private String userID;

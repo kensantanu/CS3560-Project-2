@@ -1,16 +1,22 @@
-package GUI;
+
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultTreeModel;
 
 public class MainPanel implements ActionListener{
 	
 	// create Java swing components
 	private JFrame frameMain = new JFrame("Admin Control Panel");
-	private JTree treeUser = new JTree();
+	
+	
+	Node root = new Node("Root");
+	DefaultTreeModel treeModel = new DefaultTreeModel(root);
+	
+	private JTree tree = new JTree(treeModel);
 
 	private JPanel panelTree = new JPanel();
 	private JPanel panelUser = new JPanel();
@@ -29,6 +35,11 @@ public class MainPanel implements ActionListener{
 	
 	public MainPanel()
 	{    	
+		
+		// set tree properties
+		tree.setEditable(true);
+		tree.setShowsRootHandles(true);
+		
     	// set text fields properties
     	textAddUser.setPreferredSize(new Dimension(270, 30));
     	textAddGroup.setPreferredSize(new Dimension(270, 30));
@@ -59,7 +70,7 @@ public class MainPanel implements ActionListener{
     	// set panels properties
     	panelTree.setBackground(new Color(225, 232, 237));
     	panelTree.setBounds(0, 0, 400, 600);
-    	panelTree.add(treeUser);
+    	panelTree.add(tree);
     	
     	panelUser.setBackground(new Color(29, 161, 242));
     	panelUser.setBounds(400, 0, 400, 400);
@@ -85,15 +96,29 @@ public class MainPanel implements ActionListener{
     	frameMain.add(panelTree);
     	frameMain.add(panelUser);
     	frameMain.add(panelStats);
-    	treeUser.setPreferredSize(new Dimension(380, 550));
+    	tree.setPreferredSize(new Dimension(380, 550));
     	frameMain.setVisible(true);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == buttonAddUser)
+		{
+			Node selectedNode = (Node) tree.getLastSelectedPathComponent();
+			selectedNode.add(new Node("New User"));
+			treeModel.reload();
+		}
+		
+		if (e.getSource() == buttonAddGroup)
+		{
+			Node selectedNode = (Node) tree.getLastSelectedPathComponent();
+			selectedNode.add(new Node("New Group"));
+			treeModel.reload();
+		}
+		
 		if (e.getSource() == buttonOpenUserView)
 		{
-			new UserPanel();
+			new UserPanel((Node) tree.getLastSelectedPathComponent());
 		}
 		
 	}

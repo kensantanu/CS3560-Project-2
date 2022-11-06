@@ -1,4 +1,4 @@
-package GUI;
+
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -22,7 +22,7 @@ public class UserPanel implements ActionListener{
 	private JButton buttonFollowUser = new JButton("Follow User");
 	private JButton buttonPostTweet = new JButton("Post Tweet");
 
-	public UserPanel()
+	public UserPanel(Node node)
 	{    	
     	// set text fields properties
     	textFollowUser.setPreferredSize(new Dimension(270, 30));
@@ -59,6 +59,7 @@ public class UserPanel implements ActionListener{
 
     	// set frame properties
     	//frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	frameMain.setTitle(node.getName());
     	frameMain.setResizable(false);
     	frameMain.setSize(400, 400);
     	frameMain.setLayout(null);
