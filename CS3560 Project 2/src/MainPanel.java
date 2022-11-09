@@ -1,5 +1,3 @@
-
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,10 +10,8 @@ public class MainPanel implements ActionListener{
 	// create Java swing components
 	private JFrame frameMain = new JFrame("Admin Control Panel");
 	
-	
-	Node root = new Node("Root");
-	DefaultTreeModel treeModel = new DefaultTreeModel(root);
-	
+	private UserGroup root = new UserGroup("Root");
+	private DefaultTreeModel treeModel = new DefaultTreeModel(root);	
 	private JTree tree = new JTree(treeModel);
 
 	private JPanel panelTree = new JPanel();
@@ -34,12 +30,7 @@ public class MainPanel implements ActionListener{
 	private JButton buttonShowPositivePercentage = new JButton("Show Positive Percentage");
 	
 	public MainPanel()
-	{    	
-		
-		// set tree properties
-		tree.setEditable(true);
-		tree.setShowsRootHandles(true);
-		
+	{		
     	// set text fields properties
     	textAddUser.setPreferredSize(new Dimension(270, 30));
     	textAddGroup.setPreferredSize(new Dimension(270, 30));
@@ -87,6 +78,11 @@ public class MainPanel implements ActionListener{
     	panelStats.add(buttonShowTotalGroup);
     	panelStats.add(buttonShowTotalMessages);
     	panelStats.add(buttonShowPositivePercentage);
+    		
+		// set tree properties
+		tree.setEditable(true);
+		tree.setShowsRootHandles(true);
+    	tree.setPreferredSize(new Dimension(380, 550));
     	
     	// set frame properties
     	frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -96,31 +92,88 @@ public class MainPanel implements ActionListener{
     	frameMain.add(panelTree);
     	frameMain.add(panelUser);
     	frameMain.add(panelStats);
-    	tree.setPreferredSize(new Dimension(380, 550));
     	frameMain.setVisible(true);
+    	
+    	demoContent(); 	
 	}
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == buttonAddUser)
 		{
 			Node selectedNode = (Node) tree.getLastSelectedPathComponent();
-			selectedNode.add(new Node("New User"));
-			treeModel.reload();
+			
+			if (selectedNode instanceof User)
+			{
+				JOptionPane.showMessageDialog(null, "Select a folder", "ERROR",JOptionPane.WARNING_MESSAGE);
+			}
+			else
+			{
+				selectedNode.add(new User(textAddUser.getText()));
+				treeModel.reload();
+				expandTree();
+			}
+			
+			textAddUser.setText(null);
+			
 		}
 		
 		if (e.getSource() == buttonAddGroup)
 		{
 			Node selectedNode = (Node) tree.getLastSelectedPathComponent();
-			selectedNode.add(new Node("New Group"));
-			treeModel.reload();
+			
+			if (selectedNode instanceof User)
+			{
+				JOptionPane.showMessageDialog(null, "Select a folder", "ERROR",JOptionPane.WARNING_MESSAGE);
+			}
+			else
+			{
+				selectedNode.add(new UserGroup(textAddGroup.getText()));
+				treeModel.reload();
+				expandTree();
+			}			
+
+			textAddGroup.setText(null);
+			
 		}
 		
 		if (e.getSource() == buttonOpenUserView)
 		{
-			new UserPanel((Node) tree.getLastSelectedPathComponent());
+			new UserPanel((User) tree.getLastSelectedPathComponent());
 		}
 		
+	}
+	
+	private void expandTree()
+	{
+		for (int i = 0; i < tree.getRowCount(); i++) {
+    	    tree.expandRow(i);
+    	}
+	}
+	
+	private void demoContent()
+	{
+		// Demo Content
+		User u1 = new User("Adam");
+		User u2 = new User("Eve");
+		u1.follow(u2);
+		u2.follow(u1);
+		
+		UserGroup g1 = new UserGroup("HIST");
+		UserGroup g2 = new UserGroup("CSCI");
+		g1.add(u1);
+		g1.add(u2);
+		g2.add(new User("Alan"));
+		g2.add(new User("Ada"));
+		g2.add(new User("Grace"));
+		root.add(g1);
+		root.add(g2);
+		
+		new UserPanel(u1);
+		
+		expandTree();
+			
 	}
 	
 }
