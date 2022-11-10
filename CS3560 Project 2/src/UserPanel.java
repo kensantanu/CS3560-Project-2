@@ -24,7 +24,8 @@ public class UserPanel implements ActionListener{
 	
 	private JButton buttonFollowUser = new JButton("Follow User");
 	private JButton buttonPostTweet = new JButton("Post Tweet");
-
+	
+	// constructor
 	public UserPanel(User node)
 	{    	
 		user = node;
@@ -50,7 +51,7 @@ public class UserPanel implements ActionListener{
     	panelTop.add(panelFollow);
     	
     	panelFollow.setLayout(new BoxLayout (panelFollow, BoxLayout.Y_AXIS));
-    	updatePanelFollow();
+    	//updatePanelFollow();
     	
     	panelBottom.setBackground(new Color(225, 232, 237));
     	panelBottom.setBounds(0, 200, 400, 200);
@@ -60,7 +61,7 @@ public class UserPanel implements ActionListener{
     	panelBottom.add(panelTweet);
     	
     	panelTweet.setLayout(new BoxLayout (panelTweet, BoxLayout.Y_AXIS));
-		updatePanelTweet();
+		//updatePanelTweet();
     	
     	panelFollow.setBackground(new Color(255, 255, 255));
     	panelFollow.setPreferredSize(new Dimension(375, 155));
@@ -70,13 +71,29 @@ public class UserPanel implements ActionListener{
 
     	// set frame properties
     	//frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    	frameMain.setTitle(user.toString());
+    	frameMain.setTitle(user.getID());
     	frameMain.setResizable(false);
     	frameMain.setSize(400, 400);
     	frameMain.setLayout(null);
     	frameMain.add(panelTop);
     	frameMain.add(panelBottom);
-    	frameMain.setVisible(true);
+    	frameMain.setTitle(user.getID());
+    	
+	}
+	
+	public void refreshPanel()
+	{
+		updatePanelFollow();
+		updatePanelTweet();
+		frameMain.setTitle(user.getID());	
+	}
+	
+	public void showPanel()
+	{
+		updatePanelFollow();
+		updatePanelTweet();
+		frameMain.setTitle(user.getID());
+		frameMain.setVisible(true);
 	}
 	
 	private void updatePanelFollow()
@@ -87,15 +104,19 @@ public class UserPanel implements ActionListener{
 			panelFollow.add(new JLabel(i.getID()));
         }
 		
+		panelFollow.revalidate();
+		
 	}
 	
-	private void updatePanelTweet()
+	public void updatePanelTweet()
 	{
 		panelTweet.removeAll();
 		
 		for (String i : user.getFeeds()) {
 			panelTweet.add(new JLabel(i));
         }
+		
+		panelTweet.revalidate();
 		
 	}
 
@@ -114,9 +135,18 @@ public class UserPanel implements ActionListener{
 				 
 				 if (i.getID().equals(textFollowUser.getText()))
 				 {
-					 user.follow((User) i);
-					 updatePanelFollow();
-					 frameMain.setVisible(true);
+					if (i instanceof User)
+					{
+						 user.follow((User) i);
+						 updatePanelFollow();
+						 frameMain.setVisible(true);
+					}
+					
+					if (i instanceof UserGroup)
+					{
+						JOptionPane.showMessageDialog(null, i + " is not a user!", "ERROR",JOptionPane.WARNING_MESSAGE);
+					}
+					 
 				 }
 				 
 			 }
@@ -126,14 +156,16 @@ public class UserPanel implements ActionListener{
 		
 		if (e.getSource() == buttonPostTweet)
 		{
+			user.getTweets().add(textPostTweet.getText());
 			user.getFeeds().add("@" + user.getID() + ": " + textPostTweet.getText());
 			panelTweet.add(new JLabel(user.getLastTweet()));
 			updatePanelTweet();
 			frameMain.setVisible(true);
+			textPostTweet.setText(null);
 			
+			// notify all followers (Observer)
 			user.notifyTweet();
 			
-			textPostTweet.setText(null);
 		}
 		
 	}

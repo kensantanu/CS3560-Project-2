@@ -29,6 +29,7 @@ public class MainPanel implements ActionListener{
 	private JButton buttonShowTotalMessages = new JButton("Show Total Messages");
 	private JButton buttonShowPositivePercentage = new JButton("Show Positive Percentage");
 	
+	// constructor
 	public MainPanel()
 	{		
     	// set text fields properties
@@ -94,10 +95,10 @@ public class MainPanel implements ActionListener{
     	frameMain.add(panelStats);
     	frameMain.setVisible(true);
     	
+    	// populate JTree with some content
     	demoContent(); 	
 	}
 	
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == buttonAddUser)
@@ -106,7 +107,7 @@ public class MainPanel implements ActionListener{
 			
 			if (selectedNode instanceof User)
 			{
-				JOptionPane.showMessageDialog(null, "Select a folder", "ERROR",JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Select a group", "ERROR",JOptionPane.WARNING_MESSAGE);
 			}
 			else
 			{
@@ -125,7 +126,7 @@ public class MainPanel implements ActionListener{
 			
 			if (selectedNode instanceof User)
 			{
-				JOptionPane.showMessageDialog(null, "Select a folder", "ERROR",JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Select a group", "ERROR",JOptionPane.WARNING_MESSAGE);
 			}
 			else
 			{
@@ -140,7 +141,49 @@ public class MainPanel implements ActionListener{
 		
 		if (e.getSource() == buttonOpenUserView)
 		{
-			new UserPanel((User) tree.getLastSelectedPathComponent());
+			Node selectedNode = (Node) tree.getLastSelectedPathComponent();
+			
+			if (selectedNode instanceof User)
+			{
+				((User) selectedNode).showUserPanel();
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(null, "Select a user", "ERROR",JOptionPane.WARNING_MESSAGE);
+			}		
+			
+		}
+		
+		if (e.getSource() == buttonShowTotalUser)
+		{
+			Visitor visitor = new UserVisitor();
+			
+			JOptionPane.showMessageDialog(null, "Total user: " + root.accept(visitor), "Show Total User",JOptionPane.PLAIN_MESSAGE);
+			
+		}
+		
+		if (e.getSource() == buttonShowTotalGroup)
+		{
+			Visitor visitor = new GroupVisitor();
+			
+			JOptionPane.showMessageDialog(null, "Total group (Including root): " + root.accept(visitor), "Show Total Group",JOptionPane.PLAIN_MESSAGE);
+			
+		}
+		
+		if (e.getSource() == buttonShowTotalMessages)
+		{
+			Visitor visitor = new MessageVisitor();
+			
+			JOptionPane.showMessageDialog(null, "Total messages: " + root.accept(visitor), "Show Total Messages",JOptionPane.PLAIN_MESSAGE);
+			
+		}
+		
+		if (e.getSource() == buttonShowPositivePercentage)
+		{
+			Visitor visitor = new TweetVisitor();
+			
+			JOptionPane.showMessageDialog(null, root.accept(visitor) + "% of messages contains positive word such as good, great and excellent", "Show Positive Percentage",JOptionPane.PLAIN_MESSAGE);
+			
 		}
 		
 	}
@@ -161,7 +204,7 @@ public class MainPanel implements ActionListener{
 		u2.follow(u1);
 		
 		UserGroup g1 = new UserGroup("HIST");
-		UserGroup g2 = new UserGroup("CSCI");
+		UserGroup g2 = new UserGroup("CS");
 		g1.add(u1);
 		g1.add(u2);
 		g2.add(new User("Alan"));
@@ -169,8 +212,6 @@ public class MainPanel implements ActionListener{
 		g2.add(new User("Grace"));
 		root.add(g1);
 		root.add(g2);
-		
-		new UserPanel(u1);
 		
 		expandTree();
 			

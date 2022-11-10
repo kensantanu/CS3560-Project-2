@@ -1,4 +1,4 @@
-public class UserGroup extends Node {
+public class UserGroup extends Node implements Visitable {
 	
 	// local variables
 	private String groupID;
@@ -24,6 +24,11 @@ public class UserGroup extends Node {
 	@Override
 	public String toString() {
 		return groupID;
+	}
+	
+	@Override
+	public int accept(Visitor visitor) {
+		return visitor.visit(this);		
 	}
 
 }

@@ -1,13 +1,16 @@
 import java.util.Vector;
 
-public class User extends Node implements Subject, Observer{
+public class User extends Node implements Subject, Observer, Visitable {
 	
 	// local variables
 	private String userID;
+	private UserPanel userPanel = new UserPanel(this);
 	private Vector<User> follower = new Vector<User>();
 	private Vector<User> following = new Vector<User>();
+	private Vector<String> tweets = new Vector<String>();
 	private Vector<String> feeds = new Vector<String>();
 	
+	// constructor
 	public User(String iD) {
 		userID = iD;
 	}
@@ -19,6 +22,10 @@ public class User extends Node implements Subject, Observer{
 	
 	public Vector<User> getFollowing() {
 		return following;
+	}
+	
+	public Vector<String> getTweets() {
+		return tweets;
 	}
 	
 	public Vector<String> getFeeds() {
@@ -47,6 +54,11 @@ public class User extends Node implements Subject, Observer{
 		return feeds.lastElement();
 	}
 	
+	public void showUserPanel()
+	{
+		userPanel.showPanel();
+	}
+	
 	@Override
 	public void follow(Observer observer) {
 		if (observer instanceof User)
@@ -70,10 +82,16 @@ public class User extends Node implements Subject, Observer{
 		if (subject instanceof User)
 		{
 			User followed = (User) subject;
-			feeds.add(followed.getLastTweet());
+			feeds.add(followed.getLastTweet());			
+			userPanel.updatePanelTweet();
 			
 		}
 		
+	}
+
+	@Override
+	public int accept(Visitor visitor) {
+		return visitor.visit(this);		
 	}
 
 }
