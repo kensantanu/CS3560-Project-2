@@ -24,6 +24,8 @@ public class MainPanel implements ActionListener{
 	private JButton buttonAddUser = new JButton("Add User");
 	private JButton buttonAddGroup = new JButton("Add Group");
 	private JButton buttonOpenUserView = new JButton("Open User View");
+	private JButton buttonValidateID = new JButton("Validate ID");
+	private JButton buttonLatestTweet = new JButton("Latest Tweet");
 	private JButton buttonShowTotalUser = new JButton("Show Total User");
 	private JButton buttonShowTotalGroup = new JButton("Show Total Group");
 	private JButton buttonShowTotalMessages = new JButton("Show Total Messages");
@@ -46,6 +48,12 @@ public class MainPanel implements ActionListener{
     	buttonOpenUserView.setPreferredSize(new Dimension(375, 30));
     	buttonOpenUserView.setFocusable(false);
     	buttonOpenUserView.addActionListener(this);
+    	buttonValidateID.setPreferredSize(new Dimension(375, 30));
+    	buttonValidateID.setFocusable(false);
+    	buttonValidateID.addActionListener(this);
+    	buttonLatestTweet.setPreferredSize(new Dimension(375, 30));
+    	buttonLatestTweet.setFocusable(false);
+    	buttonLatestTweet.addActionListener(this);
     	buttonShowTotalUser.setPreferredSize(new Dimension(200, 30));
     	buttonShowTotalUser.setFocusable(false);
     	buttonShowTotalUser.addActionListener(this);
@@ -72,6 +80,8 @@ public class MainPanel implements ActionListener{
     	panelUser.add(textAddGroup);
     	panelUser.add(buttonAddGroup);
     	panelUser.add(buttonOpenUserView);
+    	panelUser.add(buttonValidateID);
+    	panelUser.add(buttonLatestTweet);
     	  	
     	panelStats.setBackground(new Color(245, 248, 250));
     	panelStats.setBounds(400, 400, 400, 200);
@@ -93,7 +103,7 @@ public class MainPanel implements ActionListener{
     	frameMain.add(panelTree);
     	frameMain.add(panelUser);
     	frameMain.add(panelStats);
-    	frameMain.setVisible(true);
+    	frameMain.setVisible(true);    	
     	
     	// populate JTree with some content
     	demoContent(); 	
@@ -151,6 +161,14 @@ public class MainPanel implements ActionListener{
 			{
 				JOptionPane.showMessageDialog(null, "Select a user", "ERROR",JOptionPane.WARNING_MESSAGE);
 			}		
+			
+		}
+		
+		if (e.getSource() == buttonValidateID)
+		{
+			Visitor visitor = new ValidateVisitor();
+			
+			root.accept(visitor);
 			
 		}
 		
