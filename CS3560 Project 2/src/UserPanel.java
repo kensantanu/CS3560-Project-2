@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Enumeration;
 
 import javax.swing.*;
@@ -25,11 +27,14 @@ public class UserPanel implements ActionListener{
 	private JButton buttonFollowUser = new JButton("Follow User");
 	private JButton buttonPostTweet = new JButton("Post Tweet");
 	
+	SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm");
+	private String creationTime;
+	
 	// constructor
 	public UserPanel(User node)
 	{    	
 		user = node;
-		
+    	
     	// set text fields properties
     	textFollowUser.setPreferredSize(new Dimension(270, 30));
     	textPostTweet.setPreferredSize(new Dimension(270, 30));
@@ -71,7 +76,6 @@ public class UserPanel implements ActionListener{
 
     	// set frame properties
     	//frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    	frameMain.setTitle(user.getID());
     	frameMain.setResizable(false);
     	frameMain.setSize(400, 400);
     	frameMain.setLayout(null);
@@ -85,14 +89,16 @@ public class UserPanel implements ActionListener{
 	{
 		updatePanelFollow();
 		updatePanelTweet();
-		frameMain.setTitle(user.getID());	
+		creationTime = dateFormat.format(new Date(user.getCreationTime()));
+		frameMain.setTitle(user.getID() + " (Created on: " + creationTime + ")");
 	}
 	
 	public void showPanel()
 	{
 		updatePanelFollow();
 		updatePanelTweet();
-		frameMain.setTitle(user.getID());
+		creationTime = dateFormat.format(new Date(user.getCreationTime()));
+		frameMain.setTitle(user.getID() + " (Created on: " + creationTime + ")");
 		frameMain.setVisible(true);
 	}
 	

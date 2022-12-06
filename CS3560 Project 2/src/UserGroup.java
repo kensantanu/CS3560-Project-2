@@ -2,17 +2,24 @@ public class UserGroup extends Node implements Visitable {
 	
 	// local variables
 	private String groupID;
+	private long creationTime;
 	
 	// constructor
 	public UserGroup(String ID)
 	{
 		groupID = ID;
+		creationTime = System.currentTimeMillis();
 	}
 
 	// getters & setters
 	@Override
 	public String getID() {
 		return groupID;
+	}
+	
+	@Override
+	public long getCreationTime() {
+		return creationTime;
 	}
 
 	@Override

@@ -7,4 +7,6 @@ public abstract class Node extends DefaultMutableTreeNode {
 
 	public abstract void setID(String iD);
 	
+	public abstract long getCreationTime();
+	
 }
