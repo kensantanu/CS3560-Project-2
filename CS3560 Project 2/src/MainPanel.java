@@ -172,6 +172,14 @@ public class MainPanel implements ActionListener{
 			
 		}
 		
+		if (e.getSource() == buttonLatestTweet)
+		{
+			Visitor visitor = new LatestTweetVisitor();
+			
+			root.accept(visitor);
+			
+		}
+		
 		if (e.getSource() == buttonShowTotalUser)
 		{
 			Visitor visitor = new UserVisitor();
